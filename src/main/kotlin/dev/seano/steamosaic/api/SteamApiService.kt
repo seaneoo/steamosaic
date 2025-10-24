@@ -29,7 +29,8 @@ class SteamApiService {
     }
 
     fun fetchOwnedGames(id: String): Response<OwnedGames> {
-        val uri = "IPlayerService/GetOwnedGames/v0001/?key=$steamApiKey&steamid=$id&format=json"
+        val uri =
+            "IPlayerService/GetOwnedGames/v0001/?key=$steamApiKey&steamid=$id&format=json&include_played_free_games=1&include_appinfo=1"
         val res = restClient.get().uri(uri).retrieve().body<Response<OwnedGames>>()
         return res ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Owned games not found")
     }

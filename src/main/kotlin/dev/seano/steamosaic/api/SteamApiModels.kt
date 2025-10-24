@@ -13,5 +13,6 @@ data class OwnedGames(@field:JsonProperty("game_count") val gameCount: Int, val 
 
 data class Game(
     @field:JsonProperty("appid") val appId: Long,
+    val name: String,
     @field:JsonProperty("playtime_forever") val playtime: Long,
 )
