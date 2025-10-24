@@ -16,3 +16,13 @@ data class Game(
     val name: String,
     @field:JsonProperty("playtime_forever") val playtime: Long,
 )
+
+data class StoreItems(@field:JsonProperty("store_items") val storeItems: List<StoreItem>)
+
+data class StoreItem(
+    @field:JsonProperty("appid") val appId: Long,
+    val name: String,
+    val assets: Assets,
+)
+
+data class Assets(val header: String)
