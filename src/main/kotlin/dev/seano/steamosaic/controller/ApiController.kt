@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api")
 class ApiController(private val steamApiService: SteamApiService) {
-    @GetMapping("/steamId")
-    fun fetchSteamId(@RequestParam vanityUrl: String): ResponseEntity<SteamId?> {
-        val response = steamApiService.fetchSteamId(vanityUrl)
+    @GetMapping("/id")
+    fun fetchSteamId(@RequestParam name: String): ResponseEntity<SteamId?> {
+        val response = steamApiService.fetchSteamId(name)
         return ResponseEntity.ok(response.response)
     }
 
-    @GetMapping("/ownedGames")
-    fun fetchOwnedGames(@RequestParam steamId: String): ResponseEntity<OwnedGames?> {
-        val response = steamApiService.fetchOwnedGames(steamId)
+    @GetMapping("/games")
+    fun fetchOwnedGames(@RequestParam id: String): ResponseEntity<OwnedGames?> {
+        val response = steamApiService.fetchOwnedGames(id)
         return ResponseEntity.ok(response.response)
     }
 }

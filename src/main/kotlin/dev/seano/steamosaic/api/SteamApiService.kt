@@ -21,9 +21,8 @@ class SteamApiService {
             )
     }
 
-    fun fetchSteamId(vanityUrl: String): Response<SteamId> {
-        val uri =
-            "ISteamUser/ResolveVanityURL/v0001/?key=$steamApiKey&vanityurl=$vanityUrl&format=json"
+    fun fetchSteamId(name: String): Response<SteamId> {
+        val uri = "ISteamUser/ResolveVanityURL/v0001/?key=$steamApiKey&vanityurl=$name&format=json"
         val res = restClient.get().uri(uri).retrieve().body<Response<SteamId>>()
         return if (res == null || res.response.success != 1) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Steam user not found")
@@ -32,9 +31,8 @@ class SteamApiService {
         }
     }
 
-    fun fetchOwnedGames(steamId: String): Response<OwnedGames> {
-        val uri =
-            "IPlayerService/GetOwnedGames/v0001/?key=$steamApiKey&steamid=$steamId&format=json"
+    fun fetchOwnedGames(id: String): Response<OwnedGames> {
+        val uri = "IPlayerService/GetOwnedGames/v0001/?key=$steamApiKey&steamid=$id&format=json"
         val res = restClient.get().uri(uri).retrieve().body<Response<OwnedGames>>()
         return res ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Owned games not found")
     }
