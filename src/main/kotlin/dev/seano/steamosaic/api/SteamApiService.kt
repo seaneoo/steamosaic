@@ -1,5 +1,8 @@
-package dev.seano.steamosaic.api.model
+package dev.seano.steamosaic.api
 
+import dev.seano.steamosaic.api.model.OwnedGames
+import dev.seano.steamosaic.api.model.Response
+import dev.seano.steamosaic.api.model.SteamId
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient

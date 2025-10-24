@@ -1,7 +1,7 @@
 package dev.seano.steamosaic.controller
 
+import dev.seano.steamosaic.api.SteamApiService
 import dev.seano.steamosaic.api.model.OwnedGames
-import dev.seano.steamosaic.api.model.SteamApiService
 import dev.seano.steamosaic.api.model.SteamId
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
