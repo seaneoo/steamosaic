@@ -16,6 +16,10 @@
             height: 100%;
         }
 
+        body {
+            font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
         main {
             display: flex;
             flex-direction: column;
@@ -31,6 +35,10 @@
             align-items: center;
             gap: 1rem;
         }
+
+        input {
+            padding: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -41,6 +49,7 @@
         <input type="text" id="identifier" name="identifier" required placeholder="kisats or 76561198842603734">
         <button type="submit">Continue</button>
     </form>
+    <p><a href="https://github.com/seaneoo/steamosaic" target="_blank">Source code</a></p>
 </main>
 </body>
 </html>
