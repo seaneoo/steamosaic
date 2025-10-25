@@ -1,4 +1,4 @@
-package dev.seano.steamosaic.api
+package dev.seano.steamosaic.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

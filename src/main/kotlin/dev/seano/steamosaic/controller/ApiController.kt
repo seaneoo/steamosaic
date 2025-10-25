@@ -1,6 +1,6 @@
 package dev.seano.steamosaic.controller
 
-import dev.seano.steamosaic.api.SteamApiService
+import dev.seano.steamosaic.service.SteamService
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api")
-class ApiController(private val steamApiService: SteamApiService) {
+class ApiController(private val steamService: SteamService) {
     @GetMapping("/steam-id/{name}", produces = [MediaType.TEXT_PLAIN_VALUE])
     fun fetchSteamId(@PathVariable name: String): ResponseEntity<String?> {
-        val steamId = steamApiService.fetchSteamId(name).response.steamId
+        val steamId = steamService.fetchSteamId(name).response.steamId
         return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN).body(steamId)
     }
 }

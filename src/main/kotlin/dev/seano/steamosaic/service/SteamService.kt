@@ -1,5 +1,6 @@
-package dev.seano.steamosaic.api
+package dev.seano.steamosaic.service
 
+import dev.seano.steamosaic.model.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -12,10 +13,10 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @Service
-class SteamApiService() {
+class SteamService() {
     private val restClient = RestClient.create("https://api.steampowered.com/")
     private val steamApiKey = System.getenv("STEAM_API_KEY")
-    private val logger: Logger = LoggerFactory.getLogger(SteamApiService::class.java.name)
+    private val logger: Logger = LoggerFactory.getLogger(SteamService::class.java.name)
 
     init {
         if (steamApiKey.isNullOrBlank())

@@ -1,6 +1,5 @@
 package dev.seano.steamosaic.service
 
-import dev.seano.steamosaic.api.SteamApiService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -16,7 +15,7 @@ import kotlin.math.sqrt
 
 @Service
 class MosaicService(
-    private val steamApiService: SteamApiService,
+    private val steamService: SteamService,
     private val imageService: ImageService,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(MosaicService::class.java.name)
@@ -68,7 +67,7 @@ class MosaicService(
         logger.info("Generating image for Steam ID: $steamId")
 
         val appIds =
-            steamApiService
+            steamService
                 .fetchOwnedGames(steamId)
                 .response
                 .games
@@ -77,11 +76,11 @@ class MosaicService(
         logger.info("Found ${appIds.size} owned games.")
 
         val imageAssets =
-            steamApiService
-                .fetchGameAssets(appIds.take(9).map { it.toString() }.toTypedArray())
-                .map { Pair(it.appId, it.assets.header) }
+            steamService.fetchGameAssets(appIds.take(9).map { it.toString() }.toTypedArray()).map {
+                Pair(it.appId, it.assets.header)
+            }
         val imageUrls =
-            imageAssets.map { steamApiService.getHeaderImageUrl(it.first.toString(), it.second) }
+            imageAssets.map { steamService.getHeaderImageUrl(it.first.toString(), it.second) }
         val images = imageUrls.mapNotNull { imageService.fetchImageFromUrl(it) }
 
         val imageGrid =
