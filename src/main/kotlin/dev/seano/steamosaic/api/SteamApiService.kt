@@ -65,9 +65,7 @@ class SteamApiService() {
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Game info not found")
     }
 
-    fun getHeaderImageUrl(appId: String, hash: String): URI? {
-        val urlString =
-            "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/$appId/$hash/header.jpg"
-        return URI.create(urlString)
+    fun getHeaderImageUrl(appId: String, path: String): String {
+        return "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/$appId/$path"
     }
 }
