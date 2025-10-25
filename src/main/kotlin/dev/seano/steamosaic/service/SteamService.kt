@@ -66,7 +66,11 @@ class SteamService() {
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Game info not found")
     }
 
-    fun getHeaderImageUrl(appId: String, path: String): String {
+    fun getHeaderImageUrl(appId: String, path: String?): String? {
+        if (path.isNullOrBlank()) {
+            logger.warn("Header image path is null or blank for appId: $appId")
+            return null
+        }
         return "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/$appId/$path"
     }
 

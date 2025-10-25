@@ -73,15 +73,23 @@ class MosaicService(
                 .games
                 .sortedWith { a, b -> b.playtime.compareTo(a.playtime) }
                 .map { it.appId }
+                .take(100)
         logger.info("Found ${appIds.size} owned games.")
 
         val imageAssets =
-            steamService.fetchGameAssets(appIds.take(9).map { it.toString() }.toTypedArray()).map {
-                Pair(it.appId, it.assets.smallCapsule)
-            }
+            appIds
+                .chunked(10)
+                .flatMap { batch ->
+                    steamService.fetchGameAssets(batch.map { it.toString() }.toTypedArray())
+                }
+                .map { Pair(it.appId, it.assets?.smallCapsule) }
+
         val imageUrls =
             imageAssets.map { steamService.getHeaderImageUrl(it.first.toString(), it.second) }
-        val images = imageUrls.mapNotNull { imageService.fetchImageFromUrl(it) }
+        val images =
+            imageUrls.mapNotNull {
+                it?.let { urlString -> imageService.fetchImageFromUrl(urlString) }
+            }
 
         val imageGrid =
             buildMosaicImage(images)
