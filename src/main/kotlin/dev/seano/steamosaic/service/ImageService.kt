@@ -17,9 +17,9 @@ class ImageService {
     private val logger: Logger = LoggerFactory.getLogger(ImageService::class.java.name)
 
     companion object {
-        const val DEFAULT_WIDTH = 460
+        const val DEFAULT_WIDTH = 231
 
-        const val DEFAULT_HEIGHT = 215
+        const val DEFAULT_HEIGHT = 87
     }
 
     private fun resize(

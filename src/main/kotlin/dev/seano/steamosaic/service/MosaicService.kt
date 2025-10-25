@@ -77,7 +77,7 @@ class MosaicService(
 
         val imageAssets =
             steamService.fetchGameAssets(appIds.take(9).map { it.toString() }.toTypedArray()).map {
-                Pair(it.appId, it.assets.header)
+                Pair(it.appId, it.assets.smallCapsule)
             }
         val imageUrls =
             imageAssets.map { steamService.getHeaderImageUrl(it.first.toString(), it.second) }

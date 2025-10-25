@@ -25,4 +25,4 @@ data class StoreItem(
     val assets: Assets,
 )
 
-data class Assets(val header: String)
+data class Assets(@field:JsonProperty("small_capsule") val smallCapsule: String)
