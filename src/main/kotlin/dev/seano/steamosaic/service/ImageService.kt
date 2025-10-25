@@ -13,7 +13,7 @@ import javax.imageio.ImageIO
 @Service
 class ImageService {
     private val restClient = RestClient.create()
-    private val maxBytes: Long = 100_000
+    private val maxBytes: Long = 1_000_000 // 1 MB
     private val logger: Logger = LoggerFactory.getLogger(ImageService::class.java.name)
 
     companion object {
