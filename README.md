@@ -1,6 +1,4 @@
-<div align="center">
-<img src="banner.png" alt="">
-</div>
+![](banner.png)
 
 ## License
 
