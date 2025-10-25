@@ -69,4 +69,9 @@ class SteamService() {
     fun getHeaderImageUrl(appId: String, path: String): String {
         return "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/$appId/$path"
     }
+
+    fun getSteamId(identifier: String): String? {
+        return if (Regex("^\\d+$").matches(identifier)) identifier
+        else fetchSteamId(identifier).response.steamId
+    }
 }

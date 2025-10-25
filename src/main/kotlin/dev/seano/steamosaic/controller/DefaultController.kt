@@ -9,7 +9,13 @@ import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
 class DefaultController(private val mosaicService: MosaicService) {
-    @GetMapping("/{steamId}", produces = [MediaType.IMAGE_PNG_VALUE])
+    @GetMapping
+    fun index(): String {
+        @Suppress("SpringMVCViewInspection")
+        return "index"
+    }
+
+    @GetMapping("/{steamId}.png", produces = [MediaType.IMAGE_PNG_VALUE])
     fun mosaic(@PathVariable steamId: String): ResponseEntity<ByteArray?> {
         val mosaic = mosaicService.buildMosaic(steamId)
         return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(mosaic)
