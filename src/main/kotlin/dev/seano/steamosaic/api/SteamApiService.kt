@@ -1,5 +1,7 @@
 package dev.seano.steamosaic.api
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
@@ -10,9 +12,10 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @Service
-class SteamApiService {
+class SteamApiService() {
     private val restClient = RestClient.create("https://api.steampowered.com/")
     private val steamApiKey = System.getenv("STEAM_API_KEY")
+    private val logger: Logger = LoggerFactory.getLogger(SteamApiService::class.java.name)
 
     init {
         if (steamApiKey.isNullOrBlank())
@@ -38,15 +41,27 @@ class SteamApiService {
         return res ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Owned games not found")
     }
 
-    fun fetchGameAssets(appId: String): StoreItem {
+    fun fetchGameAssets(appIds: Array<String>): List<StoreItem> {
+        if (appIds.size !in 1..10) {
+            logger.warn("Invalid number of app IDs: ${appIds.size}. Must be between 1 and 10.")
+            return emptyList()
+        }
+
+        val appIdsJson =
+            appIds.joinToString(separator = ",", prefix = "[", postfix = "]") {
+                """{"appid":"$it"}"""
+            }
         val inputJson =
-            """{"ids":[{"appid":"$appId"}],"context":{"country_code":"US"},"data_request":{"include_assets":true}}"""
+            """{"ids":$appIdsJson,"context":{"country_code":"US"},"data_request":{"include_assets":true}}"""
+
         val encoded = URLEncoder.encode(inputJson, StandardCharsets.UTF_8)
-        val urlString =
+        val uriString =
             "https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?key=$steamApiKey&input_json=$encoded"
-        val uri = URI.create(urlString)
+        val uri = URI.create(uriString)
+        logger.info("Fetching game assets from URL: $uri")
+
         val res = restClient.get().uri(uri).retrieve().body<Response<StoreItems>>()
-        return res?.response?.storeItems?.first()
+        return res?.response?.storeItems
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Game info not found")
     }
 
