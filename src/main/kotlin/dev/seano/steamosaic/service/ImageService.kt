@@ -18,8 +18,27 @@ class ImageService {
 
     companion object {
         const val DEFAULT_WIDTH = 231
-
         const val DEFAULT_HEIGHT = 87
+        private const val CACHE_SIZE = 1000 // Maximum number of images to cache
+    }
+
+    private val imageCache =
+        object : LinkedHashMap<String, BufferedImage>() {
+            override fun removeEldestEntry(
+                eldest: MutableMap.MutableEntry<String, BufferedImage>?
+            ): Boolean {
+                return size > CACHE_SIZE
+            }
+        }
+
+    private fun putInCache(url: String, image: BufferedImage) {
+        synchronized(imageCache) { imageCache[url] = image }
+    }
+
+    private fun getFromCache(url: String): BufferedImage? {
+        synchronized(imageCache) {
+            return imageCache[url]
+        }
     }
 
     private fun resize(
@@ -36,6 +55,11 @@ class ImageService {
     }
 
     fun fetchImageFromUrl(urlString: String): BufferedImage? {
+        getFromCache(urlString)?.also {
+            logger.info("Image found in cache for URL: $urlString")
+            return it
+        }
+
         logger.info("Fetching image from URL: $urlString")
 
         val bytes =
@@ -63,14 +87,17 @@ class ImageService {
                 null
             } else {
                 logger.info("Successfully fetched and decoded image of ${bytes.size} bytes.")
-                if (image.width != DEFAULT_WIDTH || image.height != DEFAULT_HEIGHT) {
-                    logger.info(
-                        "Resizing image from ${image.width}x${image.height} to ${DEFAULT_WIDTH}x${DEFAULT_HEIGHT}."
-                    )
-                    resize(image)
-                } else {
-                    image
-                }
+                val finalImage =
+                    if (image.width != DEFAULT_WIDTH || image.height != DEFAULT_HEIGHT) {
+                        logger.info(
+                            "Resizing image from ${image.width}x${image.height} to ${DEFAULT_WIDTH}x${DEFAULT_HEIGHT}."
+                        )
+                        resize(image)
+                    } else {
+                        image
+                    }
+                putInCache(urlString, finalImage)
+                finalImage
             }
         }
     }
